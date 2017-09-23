@@ -396,9 +396,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Inf Include="..\..\..\..\GitHub\SCOUT-HDL\riffa driver\src\riffa.inx">
-      <FileType>Document</FileType>
-    </Inf>
+    <Inf Include="..\src\riffa.inx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

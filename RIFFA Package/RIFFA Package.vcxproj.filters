@@ -7,7 +7,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Inf Include="..\..\..\..\GitHub\SCOUT-HDL\riffa driver\src\riffa.inx">
+    <Inf Include="..\src\riffa.inx">
       <Filter>Driver Files</Filter>
     </Inf>
   </ItemGroup>
