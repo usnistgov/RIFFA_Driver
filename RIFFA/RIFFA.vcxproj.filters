@@ -22,9 +22,6 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\trace.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\precomp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -32,6 +29,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\riffa_private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\trace.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
