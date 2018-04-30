@@ -305,8 +305,8 @@ NTSTATUS RiffaEvtDevicePrepareHardware(WDFDEVICE Device, WDFCMRESLIST Resources,
 				if (!foundBar0 && desc->u.Memory.Length == 0x400) {
 					// Map in the Registers Memory resource: BAR0
 					devExt->Bar0Length = desc->u.Memory.Length;
-					devExt->Bar0 = (PULONG)MmMapIoSpace(desc->u.Memory.Start,
-						desc->u.Memory.Length, MmNonCached);
+					devExt->Bar0 = (PULONG)MmMapIoSpaceEx(desc->u.Memory.Start,
+						desc->u.Memory.Length, PAGE_READWRITE);
 					if (!devExt->Bar0) {
 						DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL,
 							"riffa: unable to map BAR memory %08I64X, length %d",
@@ -966,9 +966,13 @@ VOID RiffaEvtInterruptDpc(IN WDFINTERRUPT Interrupt, IN WDFDEVICE Device) {
  * IoControlCode - the driver-defined or system-defined I/O control code
  * (IOCTL) that is associated with the request.
  */
-VOID RiffaEvtIoDeviceControl(IN WDFQUEUE Queue, IN WDFREQUEST Request,
-	IN size_t OutputBufferLength, IN size_t InputBufferLength,
-	IN ULONG IoControlCode) {
+VOID RiffaEvtIoDeviceControl(
+	IN WDFQUEUE Queue, 
+	IN WDFREQUEST Request,
+	IN size_t OutputBufferLength, 
+	IN size_t InputBufferLength,
+	IN ULONG IoControlCode
+	) {
     PDEVICE_EXTENSION devExt;
 
     devExt = RiffaGetDeviceContext(WdfIoQueueGetDevice(Queue));
@@ -1301,8 +1305,8 @@ VOID RiffaIoctlList(IN PDEVICE_EXTENSION DevExt, IN WDFREQUEST Request,
 	}
 	if (bufSize < sizeof(UINT64)) {
 		DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL,
-			"riffa: fpga:%s, ioctl list input buffer too small to contain fpga id\n",
-			DevExt->Name);
+			"riffa: fpga:%s, ioctl list input buffer too small to contain fpga id. Size is %d; required %d. EvtIoDeviceControl->InputBufferLength was %d\n",
+			DevExt->Name, bufSize , sizeof(UINT64), InputBufferLength);
 		WdfRequestCompleteWithInformation(Request, STATUS_INVALID_PARAMETER, 0);
 		return;
 	}
@@ -1335,8 +1339,8 @@ VOID RiffaIoctlList(IN PDEVICE_EXTENSION DevExt, IN WDFREQUEST Request,
 	}
 	if (bufSize < sizeof(RIFFA_FPGA_INFO)) {
 		DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_ERROR_LEVEL,
-			"riffa: fpga:%s, ioctl list input buffer too small to contain RIFFA_FPGA_INFO\n",
-			DevExt->Name);
+			"riffa: fpga:%s, ioctl list input buffer too small to contain RIFFA_FPGA_INFO. Buffer size is %d; required %d.\n",
+			DevExt->Name, bufSize, sizeof(RIFFA_FPGA_INFO));
 		WdfRequestCompleteWithInformation(Request, STATUS_INVALID_PARAMETER, 0);
 		return;
 	}
